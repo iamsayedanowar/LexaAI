@@ -53,17 +53,22 @@ const AiResponse = ({ aiResponse, children }) => {
         );
     };
     return (
-        <div className='grid grid-cols-1 items-start gap-1 py-4 md:grid-cols-[max-content,minmax(0,1fr)] md:gap-5'>
-            <figure className='w-8 h-8 grid place-items-center'>
-                <img src={iconLogo} width={32} height={32} alt="" />
-            </figure>
-            {children}
-            <div className="markdown-content">
-                <Markdown remarkPlugins={[remarkGfm]} components={{ code }}>
-                    {aiResponse}
-                </Markdown>
+        <>
+            <div className='grid grid-cols-1 items-start gap-1 py-4 md:grid-cols-[max-content,minmax(0,1fr)] md:gap-5'>
+                <figure className='w-8 h-8 grid place-items-center'>
+                    <img src={iconLogo} width={32} height={32} alt="" />
+                </figure>
+                {children}
+                <div className="markdown-content">
+                    <Markdown remarkPlugins={[remarkGfm]} components={{ code }}>
+                        {aiResponse}
+                    </Markdown>
+                </div>
             </div>
-        </div>
+            <div className='flex justify-end items-center font-sans text-bodyMedium'>
+                <IconBtn icon='content_copy' size='small' onClick={handleCopy.bind(null, aiResponse)} />
+            </div>
+        </>
     );
 };
 
