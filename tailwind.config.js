@@ -3,7 +3,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['DM Sans', 'sans-serif'],
+                sans: ['Google Sans', 'sans-serif'],
             },
             colors: {
                 light: {
