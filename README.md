@@ -1,4 +1,4 @@
-![LexaAI](https://raw.githubusercontent.com/iamsayedanowar/LexaAI/refs/heads/main/GRP.png)
+![LexaAI](/GRP.png)
 
 # LexaAI
 
