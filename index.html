@@ -7,13 +7,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-  <title>LexaAI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('lexaai_theme') || 'system';
+        var d = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (d) {
+          document.documentElement.classList.add('dark');
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var m = document.querySelector('meta[name="color-scheme"]');
+        if (m) m.content = t === 'system' ? 'light dark' : t;
+      } catch (e) {}
+    })();
+  </script>
+  <title>LexaAI • Intelligent Multimodal Chat</title>
 </head>
 
-<body>
+<body class="antialiased selection:bg-light-primary/20 dark:selection:bg-dark-primary/30">
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

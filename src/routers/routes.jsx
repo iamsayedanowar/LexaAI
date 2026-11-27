@@ -21,6 +21,9 @@ import conversationLoader from "./loaders/conversationLoader.js";
 import conversationAction from "./actions/conversationAction.js";
 import Error from "../pages/Error.jsx";
 import RootError from "../pages/RootError.jsx";
+import Account from "../pages/Account.jsx";
+import accountLoader from "./loaders/accountLoader.js";
+import accountAction from "./actions/accountAction.js";
 
 const router = createBrowserRouter([
     {
@@ -38,6 +41,13 @@ const router = createBrowserRouter([
                 errorElement: <Error />
             }
         ]
+    },
+    {
+        path: '/account',
+        element: <Account />,
+        loader: accountLoader,
+        action: accountAction,
+        errorElement: <RootError />
     },
     {
         path: '/register',

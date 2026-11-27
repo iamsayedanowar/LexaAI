@@ -10,10 +10,11 @@ const initialCtxValue = {
         message: '',
         type: 'info'
     },
-    showSnackbar: ({ message, type = 'info', timeOut = 5000 }) => { },
+    showSnackbar: () => { },
     hideSnackbar: () => { }
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SnackbarContext = createContext(initialCtxValue);
 
 const SnackbarProvider = ({ children }) => {

@@ -1,8 +1,14 @@
 // Modules
 
+/**
+ * Submits the deletion request to the Appwrite backend action
+ * @param {Object} params
+ * @param {string} params.id - Conversation Document ID
+ * @param {string} params.title - Conversation Title
+ * @param {Function} params.submit - React Router useSubmit hook function
+ */
 const deleteConversation = ({ id, title, submit }) => {
-    const deleteConfirm = confirm(`Delete Chat ?`);
-    if (!deleteConfirm) return;
+    if (!id) return;
     submit(
         {
             request_type: 'delete_conversation',
@@ -14,7 +20,6 @@ const deleteConversation = ({ id, title, submit }) => {
             encType: 'application/x-www-form-urlencoded',
             action: '/'
         }
-
     );
 };
 

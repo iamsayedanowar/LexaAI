@@ -1,20 +1,33 @@
 // Modules
-
-import { Link } from "react-router-dom";
 import { logoDark, logoLight } from "../assets/assets";
 import PropTypes from "prop-types";
 
-const Logo = ({ classes = '' }) => {
+const Logo = ({ classes = '', size = 26 }) => {
     return (
-        <Link to='/' className={`min-w-max max-w-max h-[24px] ${classes}`}>
-            <img src={logoLight} width={32} height={32} alt="logo" className='dark:hidden' />
-            <img src={logoDark} width={32} height={32} alt="logo" className='hidden dark:block' />
-        </Link>
+        <span className={`inline-flex items-center justify-center shrink-0 ${classes}`} aria-hidden="true">
+            <img
+                src={logoLight}
+                width={size}
+                height={size}
+                alt="LexaAI"
+                className="block dark:hidden shrink-0 select-none"
+                style={{ width: `${size}px`, height: `${size}px` }}
+            />
+            <img
+                src={logoDark}
+                width={size}
+                height={size}
+                alt="LexaAI"
+                className="hidden dark:block shrink-0 select-none"
+                style={{ width: `${size}px`, height: `${size}px` }}
+            />
+        </span>
     );
 };
 
 Logo.propTypes = {
-    classes: PropTypes.string
+    classes: PropTypes.string,
+    size: PropTypes.number
 };
 
 export default Logo;

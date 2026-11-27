@@ -1,20 +1,30 @@
 // Modules
-
-import { databases } from "../../lib/appwrite";
+import { databases, CHATS_COLLECTION_ID } from "../../lib/appwrite";
 import { Query } from "appwrite";
-import { getAiResponse } from "../../api/geminiAi";
+import { getAiResponse } from "../../api/openrouterAi";
 import generateID from "../../utils/generateID";
+import { formatPromptWithAttachments } from "./appAction";
 
 const conversationAction = async ({ request, params }) => {
     const { conversationId } = params;
     const formData = await request.formData();
-    const userPrompt = formData.get('user_prompt');
+    const userPrompt = formData.get('user_prompt') || '';
+    const model = formData.get('model');
+    const rawAttachments = formData.get('attached_files');
+    let attachments = [];
+    if (rawAttachments) {
+        try {
+            attachments = JSON.parse(rawAttachments);
+        } catch (e) {
+            console.error('Failed to parse attachments', e);
+        }
+    }
+
     let chatHistory = [];
-    let aiResponse = '';
     try {
         const response = await databases.listDocuments(
             import.meta.env.VITE_APPWRITE_DATABASE_ID,
-            "chats",
+            CHATS_COLLECTION_ID,
             [
                 Query.equal("conversation", conversationId),
                 Query.orderAsc("$createdAt")
@@ -25,22 +35,31 @@ const conversationAction = async ({ request, params }) => {
             ai_response: chat.ai_response
         }));
     } catch (err) {
-        console.log(err.message);
+        console.error('Appwrite list documents error:', err.message);
     }
+
+    const aiResponse = await getAiResponse(userPrompt, chatHistory, { model, attachments });
+    const storedPrompt = formatPromptWithAttachments(userPrompt, attachments);
+    const safeAiResponse = aiResponse?.trim() || '*(No response generated)*';
+
     try {
-        aiResponse = await getAiResponse(userPrompt, chatHistory);
+        await databases.createDocument(
+            import.meta.env.VITE_APPWRITE_DATABASE_ID,
+            CHATS_COLLECTION_ID,
+            generateID(),
+            {
+                user_prompt: storedPrompt || '...',
+                ai_response: safeAiResponse,
+                conversation: conversationId
+            }
+        );
     } catch (err) {
-        console.log(err.message);
+        console.error('Appwrite create chat error:', err.message);
+        return {
+            error: `Appwrite Chats Error: ${err.message}`
+        };
     }
-    try {
-        await databases.createDocument(import.meta.env.VITE_APPWRITE_DATABASE_ID, 'chats', generateID(), {
-            user_prompt: userPrompt,
-            ai_response: aiResponse,
-            conversation: conversationId
-        });
-    } catch (err) {
-        console.log(err.message);
-    }
+
     return null;
 };
 

@@ -1,7 +1,6 @@
 // Modules
-
 import { redirect } from "react-router-dom";
-import { account, databases } from "../../lib/appwrite";
+import { account, databases, CONVERSATIONS_COLLECTION_ID } from "../../lib/appwrite";
 import { Query } from "appwrite";
 
 const appLoader = async () => {
@@ -9,11 +8,13 @@ const appLoader = async () => {
     try {
         data.user = await account.get();
     } catch (err) {
-        console.log(err.message);
+        console.error('Appwrite auth error:', err.message);
         return redirect('/login');
     }
     try {
-        data.conversations = await databases.listDocuments(import.meta.env.VITE_APPWRITE_DATABASE_ID, 'conversations',
+        data.conversations = await databases.listDocuments(
+            import.meta.env.VITE_APPWRITE_DATABASE_ID,
+            CONVERSATIONS_COLLECTION_ID,
             [
                 Query.select(['$id', 'title']),
                 Query.orderDesc('$createdAt'),
@@ -21,7 +22,8 @@ const appLoader = async () => {
             ]
         );
     } catch (err) {
-        console.log(err.message);
+        console.error('Appwrite list conversations error:', err.message);
+        data.conversations = { documents: [] };
     }
     return data;
 };
